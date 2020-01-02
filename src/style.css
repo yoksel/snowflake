@@ -1,0 +1,50 @@
+HTML {
+  font-size: 16px;
+}
+
+BODY {
+  min-height: 100vh;
+  margin: 0;
+  background: linear-gradient(
+    midnightblue, 30%, teal, 60%, turquoise, 90%, steelblue);
+  font: 1rem/1.4 Trebuchet MS, Verdana, sans-serif;
+  text-align: center;
+  color: #FFF;
+}
+
+.controls {
+  outline: 2px solid red;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1220px;
+  margin: 2rem auto;
+  padding: 0 3rem;
+  box-sizing: border-box;
+}
+
+.page__main {
+  display: flex;
+  justify-content: space-around;
+}
+
+.page__section-content {
+  /*padding: 1rem;
+  border: 1px solid;*/
+}
+
+.page__section--editor {
+  flex-shrink: 0;
+  margin-right: 3rem;
+}
+
+.page__section--view {
+  flex-shrink: 0;
+  flex-grow: 1;
+}
+
+snowflake-editor,
+snowflake-view {}
