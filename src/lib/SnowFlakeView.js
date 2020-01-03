@@ -43,8 +43,8 @@ template.innerHTML = `
       text-decoration: none;
       cursor: pointer;
       transition: all var(--transition);
-
     }
+
     .control:hover {
       background: transparent;
       box-shadow:  0 0 0 2px #FFF inset;
@@ -53,18 +53,16 @@ template.innerHTML = `
 
     .controls__downloads {
       display: none;
+      justify-content: center;
     }
 
     .controls[data-state="loading"] .control--get,
     .controls[data-state="ready"] .control--get {
       display: none;
     }
-    .controls[data-state="loading"] .controls__downloads {
-      display: block;
-    }
-
+    .controls[data-state="loading"] .controls__downloads,
     .controls[data-state="ready"] .controls__downloads {
-      display: block;
+      display: flex;
     }
 
     .control + .control {
@@ -187,6 +185,7 @@ export default class SnowFlakeView extends HTMLElement {
 
   changeTheme() {
     if(event.detail && event.detail.theme) {
+      this.controls.dataset.state = '';
       this.theme = event.detail.theme;
       this.outputStyle = this.getStyleStr();
     }
