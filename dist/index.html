@@ -1,0 +1,40 @@
+<!doctype html>
+
+<html>
+  <head>
+    <script src="script.js" type="module"></script>
+  </head>
+
+  <body>
+    <div class="page">
+      <header class="page__header">
+        <h1>Snowflackes painter</h1>
+        <p>Just custom elements experiment : )</p>
+
+        <theme-switcher class="theme-switcher"/>
+      </header>
+
+      <main class="page__main">
+        <section
+          class="page__section page__section--editor">
+          <h2>Paint area</h2>
+
+          <div class="page__section-content">
+            <snowflake-editor class="snowflake-editor"/>
+          </div>
+        </section>
+
+        <section
+          class="page__section page__section--view">
+          <h2>Final snowflake</h2>
+
+          <div class="page__section-content">
+            <snowflake-view class="snowflake-view"/>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="bundle.js"></script>
+  </body>
+</html>
