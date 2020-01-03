@@ -164,12 +164,15 @@ export default class SnowFlakeView extends HTMLElement {
       png: this.elem.querySelector('.control--download-png'),
       svg: this.elem.querySelector('.control--download-svg')
     };
+    this.theme = ['#253B59', 'turquoise'];
 
-    this.outputStyle = 'background: linear-gradient(#253B59, turquoise); color: white';
+    this.outputStyle = this.getStyleStr();
+    this.changeTheme = this.changeTheme.bind(this);
   }
 
   connectedCallback() {
     this.addEventListener('change-view', this.changeView);
+    this.addEventListener('change-theme', this.changeTheme);
 
     this.controlGet.addEventListener('click', (event) => {
       this.controls.dataset.state = 'loading';
@@ -180,6 +183,29 @@ export default class SnowFlakeView extends HTMLElement {
   changeView() {
     this.controls.dataset.state = '';
     this.targetGroup.innerHTML = event.detail.groupContent;
+  }
+
+  changeTheme() {
+    if(event.detail && event.detail.theme) {
+      this.theme = event.detail.theme;
+      this.outputStyle = this.getStyleStr();
+    }
+  }
+
+  getBackgroundStr(colorsList) {
+    let bgStr = '';
+
+    if(colorsList.length === 1) {
+      bgStr = colorsList[0]
+      return bgStr;
+    }
+
+    bgStr = `linear-gradient(to bottom, ${colorsList.join(',')})`;
+    return bgStr;
+  }
+
+  getStyleStr() {
+    return `background: ${this.getBackgroundStr(this.theme)}; color: white`;
   }
 
   disconnectedCallback() {

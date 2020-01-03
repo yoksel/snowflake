@@ -11,8 +11,8 @@ BODY {
   color: #FFF;
 }
 
-.controls {
-  outline: 2px solid red;
+H1, H2, H3 {
+  margin-top: 0;
 }
 
 .page {
@@ -23,6 +23,16 @@ BODY {
   margin: 2rem auto;
   padding: 0 3rem;
   box-sizing: border-box;
+}
+
+.page__header {
+  position: relative;
+}
+
+.theme-switcher {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .page__main {
@@ -51,7 +61,7 @@ BODY {
   align-items: center;
 }
 
-snowflake-editor,
-snowflake-view {
+.snowflake-editor,
+.snowflake-view {
   width: 100%;
 }
