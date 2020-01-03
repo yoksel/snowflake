@@ -268,7 +268,6 @@ export default class SnowFlakeEditor extends HTMLElement {
   removePaths() {
     if(Object.values(this.selected).length > 0) {
       for(let key in this.selected) {
-        console.log(key)
         this.selected[key].remove();
         delete this.selected[key];
       }
