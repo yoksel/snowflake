@@ -18,18 +18,26 @@ template.innerHTML = `
       height: 600px;
     }
 
-    :host path {
+    path {
       transition: stroke var(--transition);
     }
 
-    :host .hovered {
+    path:hover {
       stroke: aqua;
       cursor: pointer;
     }
 
-    :host .highlight {
+    .slice-tip {
+      font-size: 9px;
+      opacity: .5;
+      user-select: none;
+    }
+
+    .highlight {
       stroke: orangered;
-      cursor: pointer;
+    }
+    .highlight:hover {
+      stroke: crimson;
     }
 
     .controls {
@@ -46,55 +54,59 @@ template.innerHTML = `
       box-shadow: 0 0 0 2px transparent inset;
       color: #333;
     }
-    .control:hover {
-      background: none;
-      box-shadow: 0 0 0 2px #FFF inset;
+    .control:not(:disabled):hover {
+      background: transparent;
+      box-shadow:  0 0 0 2px #FFF inset;
       color: #FFF;
+    }
+    .control:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+      color: #777;
     }
   </style>
 
   <div class="content">
-    <svg
+    <svg class="snowflake"
       viewBox="0 0 260 300"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
-        <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
+        <path id="slice-shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
 
         <clipPath id="slice-clip-path">
-          <use xlink:href="#shape"/>
+          <use xlink:href="#slice-shape"/>
         </clipPath>
-
-        <symbol id="slice-123">
-          <use xlink:href="#shape"
-            stroke="currentColor"
-            stroke-dasharray="5 2.5"
-            stroke-width=".5"
-            stroke-opacity=".5"
-            fill="none"/>
-          <g clip-path="url(#slice-clip-path)">
-            <rect fill="none" x="0" y="0" width="100%" height="100%"></rect>
-            <g id="target-group-123" stroke="currentColor" stroke-linecap="round" stroke-width="5"></g>
-          </g>
-        </symbol>
       </defs>
 
-      <rect id="measure-rect" fill="transparent" x="0" y="0" width="100" height="100"></rect>
+      <!-- Shape for measuring SVG scaling -->
+      <rect id="measure-rect"
+        fill="transparent"
+        x="0" y="0"
+        width="100" height="100"></rect>
 
-      <g id="slice">
-        <use xlink:href="#shape"
-          stroke="currentColor"
+      <text class="slice-tip"
+          stroke="none"
+          fill="currentColor"
+          text-anchor="middle"
+          y="62" x="30"
+          transform="rotate(-30)">Paint here</text>
+
+      <g id="slice" fill="none" stroke="currentColor">
+        <!-- Contour -->
+        <use xlink:href="#slice-shape"
           stroke-dasharray="5 2.5"
           stroke-width=".5"
-          stroke-opacity=".5"
-          fill="none"/>
-        <g clip-path="url(#slice-clip-path)" fill="none">
-          <rect x="0" y="0" width="100%" height="100%"></rect>
-          <g id="target-group" stroke="currentColor" stroke-linecap="round" stroke-width="5">
-          </g>
+          stroke-opacity=".5"/>
+        <!-- Clipped slice content -->
+        <g clip-path="url(#slice-clip-path)"
+          id="target-group"
+          stroke-linecap="round"
+          stroke-width="5">
         </g>
       </g>
 
+      <!-- Mirrored slice to show symmetry -->
       <use
         xlink:href="#slice"
         transform="translate(260,0) scale(-1,1)"
@@ -114,23 +126,26 @@ export default class SnowFlakeEditor extends HTMLElement {
     this.attachShadow({mode: 'open'});
     this.elem = this.shadowRoot;
     this.elem.appendChild(template.content.cloneNode(true));
+    this.snowflake = this.elem.querySelector('.snowflake');
     this.targetGroup = this.elem.querySelector('#target-group');
     this.controlClear = this.elem.querySelector('.control--clear');
+    this.controlClear.disabled = true;
     this.scale = this.getScale();
     this.clickedPath = null;
     this.pathsCounter = 0;
     this.selected = {};
 
     this.targetGroupMouseDown = this.targetGroupMouseDown.bind(this);
-    this.mouseOverPath = this.mouseOverPath.bind(this);
-    this.mouseOutPath = this.mouseOutPath.bind(this);
     this.clear = this.clear.bind(this);
     this.unselect = this.unselect.bind(this);
+    this.mouseDown = this.mouseDown.bind(this);
+    this.mouseUp = this.mouseUp.bind(this);
+    this.mouseMove = this.mouseMove.bind(this);
   }
 
   connectedCallback() {
-    this.addEventListener('mousedown', this.mouseDown);
-    this.addEventListener('mouseup', this.mouseUp);
+    this.snowflake.addEventListener('mousedown', this.mouseDown);
+    this.snowflake.addEventListener('mouseup', this.mouseUp);
     // Catch events from parent document
     this.addEventListener('remove-path', this.removePaths);
     // Catch events for path inside paths group
@@ -140,9 +155,11 @@ export default class SnowFlakeEditor extends HTMLElement {
   }
 
   disconnectedCallback() {
-    // add later
-    // this.removeEventListener('mousedown', this.mouseDown);
-    // this.removeEventListener('mouseup', this.mouseUp);
+    this.snowflake.snowflakeremoveEventListener('mousedown', this.mouseDown);
+    this.snowflake.removeEventListener('mouseup', this.mouseUp);
+    this.removeEventListener('remove-path', this.removePaths);
+    this.targetGroup.removeEventListener('mousedown', this.targetGroupMouseDown);
+    this.controlClear.removeEventListener('click', this.clear);
   }
 
   mouseDown(event) {
@@ -157,7 +174,7 @@ export default class SnowFlakeEditor extends HTMLElement {
 
     this.targetGroup.append(this.path.elem);
 
-    this.addEventListener('mousemove', this.mouseMove);
+    this.snowflake.addEventListener('mousemove', this.mouseMove);
   }
 
   mouseMove(event) {
@@ -176,7 +193,7 @@ export default class SnowFlakeEditor extends HTMLElement {
 
       // Remove latest path
       this.path.elem.remove();
-      this.removeEventListener('mousemove', this.mouseMove);
+      this.snowflake.removeEventListener('mousemove', this.mouseMove);
       return;
     }
 
@@ -190,20 +207,8 @@ export default class SnowFlakeEditor extends HTMLElement {
       'd',
       `M${this.path.start.x},${this.path.start.y} ${this.scaleCoord(event.offsetX)},${this.scaleCoord(event.offsetY)}`);
 
-    this.removeEventListener('mousemove', this.mouseMove);
+    this.snowflake.removeEventListener('mousemove', this.mouseMove);
     this.dispatchChange();
-
-    // Add events to new path
-    this.path.elem.addEventListener('mouseover', this.mouseOverPath);
-    this.path.elem.addEventListener('mouseout', this.mouseOutPath);
-  }
-
-  mouseOverPath(event) {
-    event.target.classList.add('hovered');
-  }
-
-  mouseOutPath(event) {
-    event.target.classList.remove('hovered');
   }
 
   mouseClickPath() {
@@ -221,9 +226,12 @@ export default class SnowFlakeEditor extends HTMLElement {
   }
 
   dispatchChange() {
+    const pathStr = this.getSinglePathStr();
+    this.controlClear.disabled = !pathStr;
+
     this.dispatchEvent(new CustomEvent('change', {
       detail: {
-        groupContent: this.getSinglePathStr()
+        groupContent: pathStr
       },
       bubbles: true,
     }));
@@ -235,6 +243,10 @@ export default class SnowFlakeEditor extends HTMLElement {
 
     for(let item of this.targetGroup.children) {
       singlePathCoords += ` ${item.getAttribute('d')}`;
+    }
+
+    if(!singlePathCoords) {
+      return '';
     }
 
     return `<path d="${singlePathCoords}"/>`;

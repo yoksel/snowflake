@@ -44,11 +44,15 @@ template.innerHTML = `
       cursor: pointer;
       transition: all var(--transition);
     }
-
-    .control:hover {
+    .control:not(:disabled):hover {
       background: transparent;
       box-shadow:  0 0 0 2px #FFF inset;
       color: #FFF;
+    }
+    .control:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+      color: #777;
     }
 
     .controls__downloads {
@@ -93,26 +97,32 @@ template.innerHTML = `
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
-        <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
+        <path id="slice-shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
+
+        <clipPath id="slice-clip-path">
+          <use xlink:href="#slice-shape"/>
+        </clipPath>
+
+        <symbol id="slice">
+          <!-- Clipped slice content -->
+          <g clip-path="url(#slice-clip-path)"
+            id="target-group"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="5">
+          </g>
+        </symbol>
+
+        <symbol id="pair-slices">
+          <g transform="translate(170)">
+            <use xlink:href="#slice"/>
+            <!-- Mirrored slice to show symmetry -->
+            <use xlink:href="#slice" transform="translate(260,0) scale(-1,1)"/>
+          </g>
+        </symbol>
       </defs>
 
-      <clipPath id="slice-clip-path">
-        <use xlink:href="#shape"/>
-      </clipPath>
-
-      <symbol id="slice">
-        <g clip-path="url(#slice-clip-path)">
-          <g id="target-group" stroke="currentColor" stroke-linecap="round" stroke-width="5"></g>
-        </g>
-      </symbol>
-
-      <symbol id="pair-slices">
-        <g transform="translate(170)">
-          <use xlink:href="#slice"/>
-          <use xlink:href="#slice" transform="translate(260,0) scale(-1,1)"/>
-        </g>
-      </symbol>
-
+      <!-- Visible snowflake -->
       <g>
         <use xlink:href="#pair-slices"
              transform="rotate(30, 300, 300)"/>
@@ -158,6 +168,7 @@ export default class SnowFlakeView extends HTMLElement {
     this.snowflake = this.elem.querySelector('.snowflake');
     this.controls = this.elem.querySelector('.controls');
     this.controlGet = this.elem.querySelector('.control--get');
+    this.controlGet.disabled = true;
     this.links ={
       png: this.elem.querySelector('.control--download-png'),
       svg: this.elem.querySelector('.control--download-svg')
@@ -178,12 +189,13 @@ export default class SnowFlakeView extends HTMLElement {
     })
   }
 
-  changeView() {
+  changeView(event) {
     this.controls.dataset.state = '';
     this.targetGroup.innerHTML = event.detail.groupContent;
+    this.controlGet.disabled = !this.targetGroup.innerHTML;
   }
 
-  changeTheme() {
+  changeTheme(event) {
     if(event.detail && event.detail.theme) {
       this.controls.dataset.state = '';
       this.theme = event.detail.theme;
