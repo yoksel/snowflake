@@ -109,7 +109,7 @@ template.innerHTML = `
       <symbol id="pair-slices">
         <g transform="translate(170)">
           <use xlink:href="#slice"/>
-          <use xlink:href="#slice" transform="scale(-1,1)" style="transform-origin: 130px 0"/>
+          <use xlink:href="#slice" transform="translate(260,0) scale(-1,1)"/>
         </g>
       </symbol>
 

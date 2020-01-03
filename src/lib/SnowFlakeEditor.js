@@ -97,8 +97,8 @@ template.innerHTML = `
 
       <use
         xlink:href="#slice"
-        transform="scale(-1,1)"
-        style="transform-origin: 130px 0; opacity:.25"
+        transform="translate(260,0) scale(-1,1)"
+        style="opacity:.25"
         />
     </svg>
   </div>
