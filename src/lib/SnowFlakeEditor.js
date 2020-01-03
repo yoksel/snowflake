@@ -6,8 +6,9 @@ template.innerHTML = `
       flex-direction: column;
       width: 520px;
 
-      --transition: .15s;
+      --transition: .25s;
     }
+
     :host:focus {
       outline: none;
     }
@@ -34,7 +35,6 @@ template.innerHTML = `
     .controls {
       margin-top: 2rem;
     }
-
     .control {
       padding: .25rem 1rem;
       background: #FFF;
@@ -43,58 +43,62 @@ template.innerHTML = `
       font: inherit;
       cursor: pointer;
       transition: all var(--transition);
+      box-shadow: 0 0 0 2px transparent inset;
+      color: #333;
     }
     .control:hover {
       background: none;
-      box-shadow:  0 0 0 3px;
+      box-shadow: 0 0 0 2px #FFF inset;
       color: #FFF;
     }
   </style>
 
-  <svg viewBox="0 0 260 300">
-    <defs>
-      <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
+  <div class="content">
+    <svg viewBox="0 0 260 300">
+      <defs>
+        <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
 
-      <clipPath id="slice-clip-path">
-        <use xlink:href="#shape"/>
-      </clipPath>
+        <clipPath id="slice-clip-path">
+          <use xlink:href="#shape"/>
+        </clipPath>
 
-      <symbol id="slice-123">
+        <symbol id="slice-123">
+          <use xlink:href="#shape"
+            stroke="currentColor"
+            stroke-dasharray="5 2.5"
+            stroke-width=".5"
+            stroke-opacity=".5"
+            fill="none"/>
+          <g clip-path="url(#slice-clip-path)">
+            <rect fill="none" x="0" y="0" width="100%" height="100%"></rect>
+            <g id="target-group-123" stroke="currentColor" stroke-linecap="round" stroke-width="5"></g>
+          </g>
+        </symbol>
+      </defs>
+
+      <rect id="measure-rect" fill="transparent" x="0" y="0" width="100" height="100"></rect>
+
+      <g id="slice">
         <use xlink:href="#shape"
           stroke="currentColor"
           stroke-dasharray="5 2.5"
           stroke-width=".5"
           stroke-opacity=".5"
           fill="none"/>
-        <g clip-path="url(#slice-clip-path)">
-          <rect fill="none" x="0" y="0" width="100%" height="100%"></rect>
-          <g id="target-group-123" stroke="currentColor" stroke-linecap="round" stroke-width="5"></g>
-        </g>
-      </symbol>
-    </defs>
-
-    <rect id="measure-rect" fill="transparent" x="0" y="0" width="100" height="100"></rect>
-
-    <g id="slice">
-      <use xlink:href="#shape"
-        stroke="currentColor"
-        stroke-dasharray="5 2.5"
-        stroke-width=".5"
-        stroke-opacity=".5"
-        fill="none"/>
-      <g clip-path="url(#slice-clip-path)" fill="none">
-        <rect x="0" y="0" width="100%" height="100%"></rect>
-        <g id="target-group" stroke="currentColor" stroke-linecap="round" stroke-width="5">
+        <g clip-path="url(#slice-clip-path)" fill="none">
+          <rect x="0" y="0" width="100%" height="100%"></rect>
+          <g id="target-group" stroke="currentColor" stroke-linecap="round" stroke-width="5">
+          </g>
         </g>
       </g>
-    </g>
 
-    <use
-      xlink:href="#slice"
-      transform="scale(-1,1)"
-      style="transform-origin: 130px 0; opacity:.25"
-      />
-  </svg>
+      <use
+        xlink:href="#slice"
+        transform="scale(-1,1)"
+        style="transform-origin: 130px 0; opacity:.25"
+        />
+    </svg>
+  </div>
 
   <div class="controls">
     <button type="button" class="control control--clear">Clear</button>
