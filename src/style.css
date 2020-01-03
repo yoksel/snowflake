@@ -5,8 +5,7 @@ HTML {
 BODY {
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(
-    midnightblue, 30%, teal, 60%, turquoise, 90%, steelblue);
+  background: linear-gradient(#253B59, turquoise);
   font: 1rem/1.4 Trebuchet MS, Verdana, sans-serif;
   text-align: center;
   color: #FFF;
@@ -20,7 +19,7 @@ BODY {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1220px;
+  max-width: 1260px;
   margin: 2rem auto;
   padding: 0 3rem;
   box-sizing: border-box;
@@ -31,9 +30,9 @@ BODY {
   justify-content: space-around;
 }
 
-.page__section-content {
-  /*padding: 1rem;
-  border: 1px solid;*/
+.page__section {
+  display: flex;
+  flex-direction: column;
 }
 
 .page__section--editor {
@@ -46,5 +45,13 @@ BODY {
   flex-grow: 1;
 }
 
+.page__section-content {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
 snowflake-editor,
-snowflake-view {}
+snowflake-view {
+  width: 100%;
+}
