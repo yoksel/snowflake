@@ -35,7 +35,7 @@ const template = document.createElement('template');
 
     <svg class="snowflake" viewBox="0 0 600 600">
       <defs>
-        <path id="shape" d="M130,300, 130,0, -.5,75"></path>
+        <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
       </defs>
 
       <clipPath id="slice-clip-path">
@@ -50,18 +50,17 @@ const template = document.createElement('template');
 
       <symbol id="pair-slices">
         <g transform="translate(170)">
-
           <use xlink:href="#slice"/>
           <use xlink:href="#slice" transform="scale(-1,1)" style="transform-origin: 130px 0"/>
         </g>
       </symbol>
 
       <g>
-        <use fill="pink" xlink:href="#pair-slices"
+        <use xlink:href="#pair-slices"
              transform="rotate(30, 300, 300)"/>
-        <use fill="green" xlink:href="#pair-slices"
+        <use xlink:href="#pair-slices"
              transform="rotate(90, 300, 300)"/>
-        <use fill="gold" xlink:href="#pair-slices"
+        <use xlink:href="#pair-slices"
              transform="rotate(150, 300, 300)"/>
         <use xlink:href="#pair-slices"
              transform="rotate(210, 300, 300)"/>

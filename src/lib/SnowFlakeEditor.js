@@ -53,7 +53,7 @@ const template = document.createElement('template');
 
     <svg viewBox="0 0 260 300">
       <defs>
-        <path id="shape" d="M130,300, 130,0, 0,80z"></path>
+        <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
 
         <clipPath id="slice-clip-path">
           <use xlink:href="#shape"/>
