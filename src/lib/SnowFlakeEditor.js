@@ -217,10 +217,21 @@ export default class SnowFlakeEditor extends HTMLElement {
       this.dispatchEvent(new CustomEvent('change', {
         detail: {
           checked: this.checked,
-          groupContent: this.targetGroup.innerHTML
+          groupContent: this.getSinglePathStr()
         },
         bubbles: true,
       }));
+    }
+
+    getSinglePathStr() {
+      this.targetGroup.children.map = [].map;
+      let singlePathCoords = '';
+
+      for(let item of this.targetGroup.children) {
+        singlePathCoords += ` ${item.getAttribute('d')}`;
+      }
+
+      return `<path d="${singlePathCoords}"/>`;
     }
 
     targetGroupMouseDown(event) {
