@@ -54,7 +54,10 @@ template.innerHTML = `
   </style>
 
   <div class="content">
-    <svg viewBox="0 0 260 300">
+    <svg
+      viewBox="0 0 260 300"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
         <path id="shape" d="M130.1,300.5, 130.1,0, 0,75z"></path>
 
@@ -128,7 +131,7 @@ export default class SnowFlakeEditor extends HTMLElement {
   connectedCallback() {
     this.addEventListener('mousedown', this.mouseDown);
     this.addEventListener('mouseup', this.mouseUp);
-    // Catch event from parent document
+    // Catch events from parent document
     this.addEventListener('remove-path', this.removePaths);
     // Catch events for path inside paths group
     this.targetGroup.addEventListener('mousedown', this.targetGroupMouseDown);
@@ -220,7 +223,6 @@ export default class SnowFlakeEditor extends HTMLElement {
   dispatchChange() {
     this.dispatchEvent(new CustomEvent('change', {
       detail: {
-        checked: this.checked,
         groupContent: this.getSinglePathStr()
       },
       bubbles: true,
@@ -246,6 +248,7 @@ export default class SnowFlakeEditor extends HTMLElement {
     if(Object.values(this.selected).length > 0) {
       for(let key in this.selected) {
         this.selected[key].classList.remove('highlight');
+        delete this.selected[key];
       }
     }
   }

@@ -132,7 +132,7 @@ template.innerHTML = `
     </svg>
   </div>
 
-  <div class="controls" data-state="">
+  <div class="controls">
     <button
       type="button"
       class="control control--get">Get snowflake</button>
@@ -218,7 +218,6 @@ export default class SnowFlakeView extends HTMLElement {
 
     this.preparePng();
     this.prepareSvg();
-
   }
 
   preparePng() {
@@ -266,7 +265,5 @@ export default class SnowFlakeView extends HTMLElement {
     this.links.svg.download = `snowflake.svg`;
 
     this.controls.dataset.state = 'ready';
-
-
   }
 }
