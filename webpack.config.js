@@ -22,7 +22,6 @@ module.exports = {
   devServer: {
     contentBase: './dist',
   },
-  watch: true,
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
