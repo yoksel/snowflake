@@ -13,6 +13,22 @@ BODY {
 
 H1, H2, H3 {
   margin-top: 0;
+  font-weight: normal;
+}
+
+H1 {
+  margin: 1em 0;
+  font-size: 2.75rem;
+}
+
+A,
+A:visited,
+A:hover {
+  color: inherit;
+}
+
+A:hover {
+  text-decoration: none;
 }
 
 .page {
@@ -20,19 +36,34 @@ H1, H2, H3 {
   flex-direction: column;
   width: 100%;
   max-width: 1260px;
-  margin: 2rem auto;
+  margin: 0 auto;
   padding: 0 3rem;
   box-sizing: border-box;
 }
 
 .page__header {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(255,255,255,.25);
 }
 
 .theme-switcher {
   position: absolute;
   top: 0;
   right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.page__footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 3rem 0;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,.25);
 }
 
 .page__main {

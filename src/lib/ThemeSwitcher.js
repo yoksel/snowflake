@@ -3,8 +3,9 @@ template.innerHTML = `
   <style>
     :host {
       display: block;
+      position: relative
       min-width: 3rem;
-      height: 3rem;
+      height: 4rem;
     }
 
     .visuallyhidden {
