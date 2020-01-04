@@ -3,8 +3,6 @@ import SnowFlakeEditor from './lib/SnowFlakeEditor.js';
 import SnowFlakeView from './lib/SnowFlakeView.js';
 import ThemeSwitcher from './lib/ThemeSwitcher.js';
 
-import './style.css';
-
 (function() {
   const editor = document.querySelector('.snowflake-editor');
   const view = document.querySelector('.snowflake-view');
