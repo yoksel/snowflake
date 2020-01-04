@@ -155,7 +155,7 @@ export default class SnowFlakeEditor extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.snowflake.snowflakeremoveEventListener('mousedown', this.mouseDown);
+    this.snowflake.removeEventListener('mousedown', this.mouseDown);
     this.snowflake.removeEventListener('mouseup', this.mouseUp);
     this.removeEventListener('remove-path', this.removePaths);
     this.targetGroup.removeEventListener('mousedown', this.targetGroupMouseDown);
@@ -187,6 +187,12 @@ export default class SnowFlakeEditor extends HTMLElement {
   }
 
   mouseUp(event) {
+    // Prevent fire event on parent
+    // after handling path by child
+    if(!this.path) {
+      return;
+    }
+
     // Catch click to highlight path
     if(this.clickedPath) {
       this.mouseClickPath();
@@ -203,11 +209,17 @@ export default class SnowFlakeEditor extends HTMLElement {
     this.path.elem.id = `path-${this.pathsCounter}`;
     this.pathsCounter++;
 
+    const coords = {
+      x: event.offsetX,
+      y: event.offsetY
+    }
+
     this.path.elem.setAttribute(
       'd',
-      `M${this.path.start.x},${this.path.start.y} ${this.scaleCoord(event.offsetX)},${this.scaleCoord(event.offsetY)}`);
+      `M${this.path.start.x},${this.path.start.y} ${this.scaleCoord(coords.x)},${this.scaleCoord(coords.y)}`);
 
     this.snowflake.removeEventListener('mousemove', this.mouseMove);
+    this.path = null;
     this.dispatchChange();
   }
 
