@@ -25,9 +25,6 @@ template.innerHTML = `
       stroke-opacity: .5;
       transition: stroke-opacity var(--transition);
     }
-    :host .contour--hidden {
-      stroke-opacity: 0;
-    }
 
     .controls {
       margin-top: 2rem;
@@ -84,7 +81,7 @@ template.innerHTML = `
   </style>
 
   <div class="content">
-    <svg class="contour" viewBox="0 0 600 600" hidden>
+    <svg class="contour" viewBox="-20 0 640 600">
       <circle r="300" cx="300" cy="300"
         stroke="currentColor"
         stroke-dasharray="10 5"
@@ -93,7 +90,7 @@ template.innerHTML = `
     </svg>
 
     <svg class="snowflake"
-      viewBox="0 0 600 600"
+      viewBox="-20 0 640 600"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
@@ -177,6 +174,11 @@ export default class SnowFlakeView extends HTMLElement {
 
     this.outputStyle = this.getStyleStr();
     this.changeTheme = this.changeTheme.bind(this);
+
+    this.finalSizes = {
+      width: 800,
+      height: 800
+    };
   }
 
   connectedCallback() {
@@ -232,11 +234,6 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   preparePng() {
-    const image = {
-      width: 800,
-      height: 800
-    };
-
     const xml = new XMLSerializer().serializeToString(this.finalSVG);
     const svg64 = btoa(xml);
     const b64Start = 'data:image/svg+xml;base64,';
@@ -244,17 +241,17 @@ export default class SnowFlakeView extends HTMLElement {
 
     const imgObj = new Image();
     imgObj.src = image64;
-    imgObj.width = image.width;
-    imgObj.height = image.height;
+    imgObj.width = this.finalSizes.width;
+    imgObj.height = this.finalSizes.height;
 
     imgObj.addEventListener('load', () => {
-      this.canvas.width = image.width;
-      this.canvas.height = image.height;
+      this.canvas.width = this.finalSizes.width;
+      this.canvas.height = this.finalSizes.height;
       this.ctx.drawImage(imgObj, 0, 0, this.canvas.width, this.canvas.height);
 
       this.canvas.toBlob((blob) => {
         let URLObj = window.URL || window.webkitURL;
-        this.links.png.href = URLObj.createObjectURL(blob, image.type, 1);
+        this.links.png.href = URLObj.createObjectURL(blob, 'png', 1);
         this.links.png.download = `snowflake.png`;
 
         this.controls.dataset.state = 'ready';
@@ -263,13 +260,6 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   prepareSvg() {
-    const image = {
-      ext: 'png',
-      width: 500,
-      height: 500,
-      name: 'snowflake'
-    };
-
     const blob = new Blob([this.finalSVG.outerHTML], {type: 'image/svg+xml'});
     const url = URL.createObjectURL(blob);
     this.links.svg.href = url;
