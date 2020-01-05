@@ -11,9 +11,12 @@ template.innerHTML = `
       position: relative;
       min-width: 300px;
       min-height: 300px;
+      display: flex;
+      align-items: center;
+
     }
 
-    :host svg {
+    svg {
       width: 100%;
       height: 100%;
     }
@@ -166,14 +169,19 @@ export default class SnowFlakeView extends HTMLElement {
     this.controls = this.elem.querySelector('.controls');
     this.controlGet = this.elem.querySelector('.control--get');
     this.controlGet.disabled = true;
-    this.links ={
+    this.links = {
       png: this.elem.querySelector('.control--download-png'),
       svg: this.elem.querySelector('.control--download-svg')
     };
-    this.theme = ['#253B59', 'turquoise'];
+    this.theme = [
+      '#253B59',
+      'turquoise'
+    ];
 
     this.outputStyle = this.getStyleStr();
+
     this.changeTheme = this.changeTheme.bind(this);
+    this.prepareImages = this.prepareImages.bind(this);
 
     this.finalSizes = {
       width: 800,
@@ -184,11 +192,13 @@ export default class SnowFlakeView extends HTMLElement {
   connectedCallback() {
     this.addEventListener('change-view', this.changeView);
     this.addEventListener('change-theme', this.changeTheme);
+    this.controlGet.addEventListener('click', this.prepareImages);
+  }
 
-    this.controlGet.addEventListener('click', (event) => {
-      this.controls.dataset.state = 'loading';
-      this.downloadImg();
-    })
+  disconnectedCallback() {
+    this.removeEventListener('change-view', this.changeView);
+    this.removeEventListener('change-theme', this.changeTheme);
+    this.controlGet.removeEventListener('click', this.prepareImages);
   }
 
   changeView(event) {
@@ -205,6 +215,15 @@ export default class SnowFlakeView extends HTMLElement {
     }
   }
 
+  prepareImages() {
+    this.controls.dataset.state = 'loading';
+    this.finalSVG = this.snowflake.cloneNode(true);
+    this.finalSVG.style = this.outputStyle;
+
+    this.preparePng();
+    this.prepareSvg();
+  }
+
   getBackgroundStr(colorsList) {
     let bgStr = '';
 
@@ -219,18 +238,6 @@ export default class SnowFlakeView extends HTMLElement {
 
   getStyleStr() {
     return `background: ${this.getBackgroundStr(this.theme)}; color: white`;
-  }
-
-  disconnectedCallback() {
-    this.removeEventListener('change-view', this._onKeyUp);
-  }
-
-  downloadImg() {
-    this.finalSVG = this.snowflake.cloneNode(true);
-    this.finalSVG.style = this.outputStyle;
-
-    this.preparePng();
-    this.prepareSvg();
   }
 
   preparePng() {
@@ -252,7 +259,7 @@ export default class SnowFlakeView extends HTMLElement {
       this.canvas.toBlob((blob) => {
         let URLObj = window.URL || window.webkitURL;
         this.links.png.href = URLObj.createObjectURL(blob, 'png', 1);
-        this.links.png.download = `snowflake.png`;
+        this.links.png.download = 'snowflake.png';
 
         this.controls.dataset.state = 'ready';
       });
@@ -263,7 +270,7 @@ export default class SnowFlakeView extends HTMLElement {
     const blob = new Blob([this.finalSVG.outerHTML], {type: 'image/svg+xml'});
     const url = URL.createObjectURL(blob);
     this.links.svg.href = url;
-    this.links.svg.download = `snowflake.svg`;
+    this.links.svg.download = 'snowflake.svg';
 
     this.controls.dataset.state = 'ready';
   }

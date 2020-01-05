@@ -165,17 +165,11 @@ const themes = [
   },
   {
     name: 'Gray',
-    colors:
-      [
-        '#333'
-      ]
+    colors: ['#333']
   },
   {
     name: 'Black',
-    colors:
-      [
-        '#000'
-      ]
+    colors: ['#000']
   },
 ];
 
