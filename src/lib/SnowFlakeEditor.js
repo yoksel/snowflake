@@ -162,26 +162,36 @@ export default class SnowFlakeEditor extends HTMLElement {
     this.controlClear.removeEventListener('click', this.clear);
   }
 
+  getMouseOffset(event) {
+    let {left, top} = this.snowflake.getBoundingClientRect();
+    let scale = this.scale;
+    return {
+      x: scale * (event.clientX - left),
+      y: scale * (event.clientY - top)
+    };
+  }
+
   mouseDown(event) {
     // Start draw line, create path
+    let elem = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    let start = this.getMouseOffset(event);
     this.path = {
-      elem: document.createElementNS('http://www.w3.org/2000/svg', 'path'),
-      start: {
-        x: this.scaleCoord(event.offsetX),
-        y: this.scaleCoord(event.offsetY)
-      }
+      elem,
+      start
     };
 
-    this.targetGroup.append(this.path.elem);
+    this.targetGroup.append(elem);
 
     this.snowflake.addEventListener('mousemove', this.mouseMove);
   }
 
   mouseMove(event) {
     // Move path end to pointer coordinates
+    let {x, y} = this.getMouseOffset(event);
+    let {start} = this.path;
     this.path.elem.setAttribute(
       'd',
-      `M${this.path.start.x},${this.path.start.y} ${this.scaleCoord(event.offsetX)},${this.scaleCoord(event.offsetY)}`);
+      `M${start.x},${start.y} ${x},${y}`);
 
     this.clickedPath = null;
   }
@@ -209,14 +219,12 @@ export default class SnowFlakeEditor extends HTMLElement {
     this.path.elem.id = `path-${this.pathsCounter}`;
     this.pathsCounter++;
 
-    const coords = {
-      x: event.offsetX,
-      y: event.offsetY
-    }
+    let {x, y} = this.getMouseOffset(event);
+    let {start} = this.path;
 
     this.path.elem.setAttribute(
       'd',
-      `M${this.path.start.x},${this.path.start.y} ${this.scaleCoord(coords.x)},${this.scaleCoord(coords.y)}`);
+      `M${start.x},${start.y} ${x},${y}`);
 
     this.snowflake.removeEventListener('mousemove', this.mouseMove);
     this.path = null;
@@ -303,7 +311,4 @@ export default class SnowFlakeEditor extends HTMLElement {
     return width / rect.width;
   }
 
-  scaleCoord(coord) {
-    return coord * this.scale;
-  }
 }
