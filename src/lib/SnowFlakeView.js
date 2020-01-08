@@ -221,8 +221,8 @@ export default class SnowFlakeView extends HTMLElement {
     this.finalSVG = this.snowflake.cloneNode(true);
     this.finalSVG.style = this.outputStyle;
     // Fix paint SVG on canvas in Firefox
-    this.finalSVG.setAttribute('width',`${this.finalSizes.width}px`);
-    this.finalSVG.setAttribute('height',`${this.finalSizes.height}px`);
+    this.finalSVG.setAttribute('width', `${this.finalSizes.width}px`);
+    this.finalSVG.setAttribute('height', `${this.finalSizes.height}px`);
 
     this.preparePng();
     this.prepareSvg();
