@@ -180,7 +180,7 @@ export default class ThemeSwitcher extends HTMLElement {
     this.elem = this.shadowRoot;
     this.elem.appendChild(template.content.cloneNode(true));
     this.controls = this.elem.querySelector('.controls');
-    this.currentThemeNum = Math.round(Math.random() * themes.length);
+    this.currentThemeNum = Math.floor(Math.random() * themes.length);
     this.currentThemeElem = null;
     this.isCollapsed = true;
 
