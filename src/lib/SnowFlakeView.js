@@ -220,6 +220,9 @@ export default class SnowFlakeView extends HTMLElement {
     this.controls.dataset.state = 'loading';
     this.finalSVG = this.snowflake.cloneNode(true);
     this.finalSVG.style = this.outputStyle;
+    // Fix paint SVG on canvas in Firefox
+    this.finalSVG.setAttribute('width',`${this.finalSizes.width}px`);
+    this.finalSVG.setAttribute('height',`${this.finalSizes.height}px`);
 
     this.preparePng();
     this.prepareSvg();
@@ -259,7 +262,7 @@ export default class SnowFlakeView extends HTMLElement {
 
       this.canvas.toBlob((blob) => {
         let URLObj = window.URL || window.webkitURL;
-        this.links.png.href = URLObj.createObjectURL(blob, 'png', 1);
+        this.links.png.href = URLObj.createObjectURL(blob);
         this.links.png.download = 'snowflake.png';
 
         this.controls.dataset.state = 'ready';
