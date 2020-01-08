@@ -3,8 +3,6 @@ template.innerHTML = `
   <style>
     :host {
       display: block;
-
-      --transition: .25s;
     }
 
     .content {
@@ -32,27 +30,27 @@ template.innerHTML = `
     .controls {
       margin-top: 2rem;
     }
+
     .control {
       padding: .25rem 1rem;
-      background: #FFF;
+      background: var(--color-base);
       border: 0;
       border-radius: .25rem;
-      box-shadow: 0 0 0 2px transparent inset;
-      color: #333;
       font: inherit;
-      text-decoration: none;
       cursor: pointer;
       transition: all var(--transition);
+      box-shadow: 0 0 0 2px transparent inset;
+      color: var(--color-text);
     }
     .control:not(:disabled):hover {
       background: transparent;
-      box-shadow:  0 0 0 2px #FFF inset;
-      color: #FFF;
+      box-shadow:  0 0 0 2px var(--color-base) inset;
+      color: var(--color-base);
     }
     .control:disabled {
       cursor: not-allowed;
       opacity: .5;
-      color: #777;
+      color: var(--color-texttransp);
     }
 
     .controls__downloads {
