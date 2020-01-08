@@ -180,6 +180,7 @@ export default class SnowFlakeView extends HTMLElement {
 
     this.outputStyle = this.getStyleStr();
 
+    this.changeView = this.changeView.bind(this);
     this.changeTheme = this.changeTheme.bind(this);
     this.prepareImages = this.prepareImages.bind(this);
 
@@ -190,14 +191,14 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   connectedCallback() {
-    this.addEventListener('change-view', this.changeView);
-    this.addEventListener('change-theme', this.changeTheme);
+    document.addEventListener('change-view', this.changeView);
+    document.addEventListener('change-theme', this.changeTheme);
     this.controlGet.addEventListener('click', this.prepareImages);
   }
 
   disconnectedCallback() {
-    this.removeEventListener('change-view', this.changeView);
-    this.removeEventListener('change-theme', this.changeTheme);
+    document.removeEventListener('change-view', this.changeView);
+    document.removeEventListener('change-theme', this.changeTheme);
     this.controlGet.removeEventListener('click', this.prepareImages);
   }
 

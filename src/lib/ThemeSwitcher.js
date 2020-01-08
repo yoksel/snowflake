@@ -256,7 +256,7 @@ export default class ThemeSwitcher extends HTMLElement {
     const colors = themes[this.currentThemeNum].colors;
     this.controls.style.background = colors[0];
 
-    this.dispatchEvent(new CustomEvent('change-theme', {
+    document.dispatchEvent(new CustomEvent('change-theme', {
       detail: {
         theme: colors
       },

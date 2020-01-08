@@ -141,25 +141,26 @@ export default class SnowFlakeEditor extends HTMLElement {
     this.mouseDown = this.mouseDown.bind(this);
     this.mouseUp = this.mouseUp.bind(this);
     this.mouseMove = this.mouseMove.bind(this);
+    this.bodyKeyUp = this.bodyKeyUp.bind(this);
   }
 
   connectedCallback() {
     this.snowflake.addEventListener('mousedown', this.mouseDown);
     this.snowflake.addEventListener('mouseup', this.mouseUp);
-    // Catch events from parent document
-    this.addEventListener('remove-path', this.removePaths);
     // Catch events for path inside paths group
     this.targetGroup.addEventListener('mousedown', this.targetGroupMouseDown);
 
     this.controlClear.addEventListener('click', this.clear);
+
+    document.addEventListener('keyup', this.bodyKeyUp);
   }
 
   disconnectedCallback() {
     this.snowflake.removeEventListener('mousedown', this.mouseDown);
     this.snowflake.removeEventListener('mouseup', this.mouseUp);
-    this.removeEventListener('remove-path', this.removePaths);
     this.targetGroup.removeEventListener('mousedown', this.targetGroupMouseDown);
     this.controlClear.removeEventListener('click', this.clear);
+    document.removeEventListener('keyup', this.bodyKeyUp);
   }
 
   getMouseOffset(event) {
@@ -169,6 +170,12 @@ export default class SnowFlakeEditor extends HTMLElement {
       x: scale * (event.clientX - left),
       y: scale * (event.clientY - top)
     };
+  }
+
+  bodyKeyUp(event) {
+    if(event.keyCode === 8 || event.keyCode === 46) {
+      this.removePaths();
+    }
   }
 
   mouseDown(event) {
@@ -249,7 +256,7 @@ export default class SnowFlakeEditor extends HTMLElement {
     const pathStr = this.getSinglePathStr();
     this.controlClear.disabled = !pathStr;
 
-    this.dispatchEvent(new CustomEvent('change', {
+    document.dispatchEvent(new CustomEvent('change-view', {
       detail: {
         groupContent: pathStr
       },
