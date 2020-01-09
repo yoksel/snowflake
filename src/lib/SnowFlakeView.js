@@ -175,6 +175,9 @@ export default class SnowFlakeView extends HTMLElement {
       '#253B59',
       'turquoise'
     ];
+    this.accents = {
+      base: '#FFF'
+    };
 
     this.outputStyle = this.getStyleStr();
 
@@ -207,9 +210,10 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   changeTheme(event) {
-    if(event.detail && event.detail.theme) {
+    if(event.detail && event.detail.colors) {
       this.controls.dataset.state = '';
-      this.theme = event.detail.theme;
+      this.theme = event.detail.colors;
+      this.accents = event.detail.accents;
       this.outputStyle = this.getStyleStr();
     }
   }
@@ -239,7 +243,7 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   getStyleStr() {
-    return `background: ${this.getBackgroundStr(this.theme)}; color: white`;
+    return `background: ${this.getBackgroundStr(this.theme)}; color: ${this.accents.base}`;
   }
 
   preparePng() {
