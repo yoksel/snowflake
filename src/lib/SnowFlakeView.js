@@ -36,11 +36,12 @@ template.innerHTML = `
       background: var(--color-base);
       border: 0;
       border-radius: .25rem;
-      font: inherit;
-      cursor: pointer;
       transition: all var(--transition);
       box-shadow: 0 0 0 2px transparent inset;
+      text-decoration: none;
       color: var(--color-text);
+      font: inherit;
+      cursor: pointer;
     }
     .control:not(:disabled):hover {
       background: transparent;
