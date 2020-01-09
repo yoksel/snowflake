@@ -207,9 +207,9 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   changeTheme(event) {
-    if(event.detail && event.detail.theme) {
+    if(event.detail && event.detail.colors) {
       this.controls.dataset.state = '';
-      this.theme = event.detail.theme;
+      this.theme = event.detail.colors;
       this.outputStyle = this.getStyleStr();
     }
   }
@@ -239,7 +239,7 @@ export default class SnowFlakeView extends HTMLElement {
   }
 
   getStyleStr() {
-    return `background: ${this.getBackgroundStr(this.theme)}; color: white`;
+    return `background: ${this.getBackgroundStr(this.theme)}; color: ` + (this.theme.length === 1 && this.theme[0] == '#FFF' ? 'black' : 'white');
   }
 
   preparePng() {
